@@ -20,11 +20,15 @@ public class PlayerController : MonoBehaviour
     public Text startText;
     private bool restart;
 
-    public AudioSource startup;
-    public AudioSource background;
-    public AudioSource winning;
+
     public AudioSource losing;
+        public AudioSource startup;
+    public AudioSource winning;
     public AudioSource pickup;
+    public AudioSource beats;
+
+   
+
 
     private Rigidbody2D rb2d;
 
@@ -42,7 +46,9 @@ public class PlayerController : MonoBehaviour
 
     private int count;
 
-    private AudioSource audioSource;
+    
+
+    
 
 
 
@@ -53,7 +59,9 @@ public class PlayerController : MonoBehaviour
     void Start()
 
     {
-        audioSource = GetComponent<AudioSource>();
+        
+
+        
 
         rb2d = GetComponent<Rigidbody2D>();
 
@@ -71,7 +79,7 @@ public class PlayerController : MonoBehaviour
 
         startText.gameObject.SetActive(true);
         timer = startTimer;
-        startText.text = starter.ToString("Catch 5 other falling stars before you run out of power!");
+        startText.text = starter.ToString("Find 5 other falling stars!             (Arrow keys to move)");
         countdownText.gameObject.SetActive(false);
     }
 
@@ -79,37 +87,44 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        
+        beats.Play();
         startup.Play();
-
-        background.Play();
+        
     }
 
     void Update()
 
     {
 
-        if (Input.GetKey("escape"))
+       if (Input.GetKeyDown(KeyCode.Q))
 
+        {
             Application.Quit();
+        }
 
         if (restart)
         {
-            if (Input.GetKeyDown(KeyCode.X))
+            if (timer <= -3)
             {
-                SceneManager.LoadScene("SampleScene");
+                Application.Quit();
             }
 
         }
         if (count >= 5)
 
         {
-            winning.Play();
+
+           
+            
+          //winning.Play();
+
 
             countdownText.gameObject.SetActive(false);
 
             loseText.gameObject.SetActive(false);
 
-            winText.text = "You Win! Press 'X' to play again!";
+            winText.text = "You Win!";
 
             restart = true;
 
@@ -131,7 +146,7 @@ public class PlayerController : MonoBehaviour
             if (timer <= 10)
             {
                 startText.gameObject.SetActive(false);
-
+                
                 countdownText.gameObject.SetActive(true);
                 countdownText.text = timer.ToString("0");
                 countdownText.color = Color.white;
@@ -144,15 +159,16 @@ public class PlayerController : MonoBehaviour
 
             if (timer <= 0)
             {
-                losing.Play();
 
-                timer = 0;
 
-                restart = true;
+            // losing.Play();
+            countdownText.gameObject.SetActive(false);
+
+            restart = true;
 
                 winText.gameObject.SetActive(false);
 
-                loseText.text = "You lose! Try again? (Press 'X')";
+                loseText.text = "You lose!";
             }
 
         }
@@ -186,7 +202,7 @@ public class PlayerController : MonoBehaviour
             {
                 countText.gameObject.SetActive(true);
 
-                pickup.Play();
+            pickup.Play();
 
                 other.gameObject.SetActive(false);
 
